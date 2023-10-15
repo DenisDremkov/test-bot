@@ -1,0 +1,69 @@
+
+
+<main [ngSwitch]="currStep$ | async">
+
+  <ng-container *ngSwitchCase="BOT_STEPS.SELECT_CONTAINERS">
+    <div><b>Step 1. For loop</b></div>
+    <p *ngIf="selectedByUserContainers.length < 2">Select at least 2 elements </p>
+    <p
+      *ngIf="selectedByUserContainers.length >= 2">
+      Great! You selected {{selectedByUserContainers.length}} elements<ng-container
+        *ngIf="predictedContainersAmount > 0">, we predicted {{predictedContainersAmount}} additional element. In total {{selectedByUserContainers.length + predictedContainersAmount}} elements are selected
+      </ng-container>
+    </p>
+  </ng-container>
+
+  <ng-container *ngSwitchCase="BOT_STEPS.SELECT_ACTIONS">
+    <div><b>Step 2. Choose an child-action on each loop element</b></div>
+    <p>Add action you want the bot to do on the page</p>
+    <div>
+      <button
+        *ngFor="let action of actions"
+        type="button"
+        class="action-type"
+        (click)="addAction(action)">
+        {{action.title}}
+      </button>
+    </div>
+  </ng-container>
+
+  <ng-container *ngSwitchCase="BOT_STEPS.SELECT_ELEMENTS">
+    <div><b>Step 3. Select elements for {{currAction?.title}}</b></div>
+    <input
+      *ngIf="currAction?.type === BOT_ACTIONS.INPUT"
+      type="text"
+      placeholder="Text"
+      [(ngModel)]="inputText">
+    <p *ngIf="selectedByUserElements.length < 2">Please select at least 2 {{isClickAction ? 'clickable' : 'input'}} elements</p>
+    <p
+      *ngIf="selectedByUserElements.length >= 2">
+      Great! You selected {{selectedByUserElements.length}} elements<ng-container
+        *ngIf="predictedElements.length > 0">, we predicted {{predictedElements.length}} additional element. In total {{selectedByUserElements.length + predictedElements.length}} elements are selected.
+      </ng-container>
+      You can run bot now!
+    </p>
+  </ng-container>
+</main>
+
+<footer>
+  <button
+    type="button"
+    (click)="reset()"
+    [disabled]="selectedByUserContainers.length === 0">
+    Reset
+  </button>
+  <button
+    type="button"
+    *ngIf="isSelectContainers"
+    [disabled]="selectedByUserContainers.length < 2"
+    (click)="save()">
+    Save
+  </button>
+  <button
+    type="button"
+    *ngIf="isSelectElements"
+    [disabled]="isDisabledForInputAction || this.selectedByUserElements.length < 2"
+    (click)="run()">
+    Run bot
+  </button>
+</footer>

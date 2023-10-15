@@ -1,0 +1,47 @@
+$footer-height: 60px;
+
+:host {
+  display: block;
+  height: 100%;
+  position: relative;
+}
+
+input {
+  border: 1px solid #ccc;
+}
+
+button {
+  min-width: 60px;
+  height: 40px;
+  padding: 5px;
+  margin: 5px 20px;
+  border: 1px solid #ccc;
+
+  &.action-type {
+    min-width: 120px;
+    border: 3px solid #ccc;
+  }
+
+  &:not(:disabled) {
+    cursor: pointer;
+  }
+}
+
+main {
+  padding: 10px;
+  height: 100%;
+  overflow-y: auto;
+  padding-bottom: $footer-height;
+}
+
+footer {
+  padding: 10px;
+  position: absolute;
+  height: $footer-height;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
