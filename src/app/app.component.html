@@ -9,14 +9,7 @@
         class="input-todo"
         placeholder="Take the garbage out"
       />
-      <input
-        type="text"
-        value="New task 1"
-        class="input-todo"
-        placeholder="Take the garbage out"
-      />
       <div class="btn btn-add active" (click)="addTask('New task 1')">+</div>
-      <div class="btn btn-add active" (click)="addTask('New task 3')">+</div>
     </form>
     <form>
       <input
@@ -25,14 +18,7 @@
         class="input-todo"
         placeholder="Take the garbage out"
       />
-      <input
-        type="text"
-        value="New task 2"
-        class="input-todo"
-        placeholder="Take the garbage out"
-      />
       <div class="btn btn-add active" (click)="addTask('New task 2')">+</div>
-      <div class="btn btn-add active" (click)="addTask('New task 3')">+</div>
     </form>
     <form>
       <input
@@ -41,13 +27,6 @@
         class="input-todo"
         placeholder="Take the garbage out"
       />
-      <input
-        type="text"
-        value="New task 2"
-        class="input-todo"
-        placeholder="Take the garbage out"
-      />
-      <div class="btn btn-add active" (click)="addTask('New task 3')">+</div>
       <div class="btn btn-add active" (click)="addTask('New task 3')">+</div>
     </form>
     <div v-if="pending.length > 0">
