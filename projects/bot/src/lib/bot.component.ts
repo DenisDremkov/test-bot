@@ -5,6 +5,7 @@ import { IBotDomContainer, IBotDomContainerChild } from './interfaces';
 import { createOverlayWithStyles, getDeepChilds, getPathFromRoot, isClickableElement, isHasSiblingWithSameTagAndChilds, isInputElement } from './helpers';
 
 interface IAction {title: string, type: BOT_ACTIONS};
+
 @Component({
   selector: 'denys-bot',
   templateUrl: './bot.component.html',
@@ -115,7 +116,7 @@ export class DenysBotComponent {
     }
   }
 
-  private getElementForAction(): Array<IBotDomContainerChild> {
+  private getElementsForAction(): Array<IBotDomContainerChild> {
     return [...this.selectedByUserElements, ...(this.predictedElements || [])];
   }
 
@@ -173,24 +174,21 @@ export class DenysBotComponent {
         this.prevHighlightedContainers = childs;
         childs.forEach(i => i.classList.add(CSS_CLASS_SIMILAR));
       } else {
-        this.removeContainersHighlights()
+        this.removeContainersHighlights();
       }
     } else {
-      this.removeContainersHighlights()
+      this.removeContainersHighlights();
     }
   }
 
   private handleMousemove(el: Element): void {
     if (this.lastHoveredElem !== el) {
-      if (this.isSelectContainers) {
-        if (el.classList.contains(CSS_CLASS_OVERLAY)) {
-        } else {
-          this.removeOverlay();
-          this.handleHighlightContainer(el);
-        }
+      if (this.isSelectContainers && !el.classList.contains(CSS_CLASS_OVERLAY)) {
+        this.removeOverlay();
+        this.handleHighlightContainer(el);
       }
       if (this.isSelectElements) {
-        this.handleHighlightElements(el)
+        this.handleHighlightElements(el);
       }
       this.lastHoveredElem = el;
     }
@@ -330,6 +328,26 @@ export class DenysBotComponent {
     document.head.appendChild(sheet);
   }
 
+  private executeAction(): void {
+    this.getElementsForAction()?.forEach(i => {
+      switch (this.currAction?.type) {
+        case BOT_ACTIONS.CLICK:
+          var clickEvent = new MouseEvent('click', {
+            'view': window,
+            'bubbles': true,
+            'cancelable': false
+          });
+          i.el.dispatchEvent(clickEvent);
+          break;
+        case BOT_ACTIONS.INPUT:
+          (i.el as HTMLInputElement).value = this.inputText as string;
+          break;
+        default:
+          break;
+      }
+    })
+  }
+
   private clearState(): void {
     this.prevHighlightedContainers = [];
     this.removeOverlay();
@@ -361,24 +379,7 @@ export class DenysBotComponent {
   }
 
   run(): void {
-    this.getElementForAction()?.forEach(i => {
-      switch (this.currAction?.type) {
-        case BOT_ACTIONS.CLICK:
-          var clickEvent = new MouseEvent('click', {
-            'view': window,
-            'bubbles': true,
-            'cancelable': false
-          });
-          i.el.dispatchEvent(clickEvent);
-          break;
-        case BOT_ACTIONS.INPUT:
-
-          (i.el as HTMLInputElement).value = this.inputText as string;
-          break;
-        default:
-          break;
-      }
-    })
+    this.executeAction();
     this.reset();
   }
 }
